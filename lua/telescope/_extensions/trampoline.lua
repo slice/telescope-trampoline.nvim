@@ -88,7 +88,7 @@ function M.project(opts)
         vim.cmd('tcd ' .. project_root)
         vim.schedule(function() vim.api.nvim_echo({{project_root}}, false, {}) end)
       end, false))
-      map('i', '<c-t>', M.action(function(project_root)
+      map('i', '<c-o>', M.action(function(project_root)
         local shell = vim.env.SHELL
         vim.cmd('tab terminal sh -c "cd ' .. project_root .. '; ' .. shell .. '"')
       end, false))
