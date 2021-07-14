@@ -90,7 +90,7 @@ function M.project(opts)
       end, false))
       map('i', '<c-o>', M.action(function(project_root)
         local shell = vim.env.SHELL
-        vim.cmd('tab terminal sh -c "cd ' .. project_root .. '; ' .. shell .. '"')
+        vim.cmd('tabnew | terminal sh -c "cd ' .. project_root .. '; ' .. shell .. '"')
       end, false))
 
       action_set.select:replace(function(_, type)
