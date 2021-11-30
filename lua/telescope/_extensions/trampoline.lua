@@ -54,7 +54,7 @@ function M.project_finder(opts)
 end
 
 function M.get_selected_path(prompt_bufnr)
-  return actions.get_selected_entry(prompt_bufnr).value
+  return action_state.get_selected_entry(prompt_bufnr).value
 end
 
 M.actions = {}
