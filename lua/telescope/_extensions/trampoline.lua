@@ -62,7 +62,7 @@ M.actions = {}
 function M.action(action, keepinsert)
   keepinsert = (keepinsert == nil and true) or keepinsert
   return function(prompt_bufnr)
-    actions._close(prompt_bufnr, keepinsert)
+    actions.close(prompt_bufnr)
     local project_root = M.get_selected_path(prompt_bufnr)
     action(project_root)
   end
