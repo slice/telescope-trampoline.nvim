@@ -3,8 +3,9 @@
 A [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) extension
 to jump between project directories.
 
-> [!IMPORTANT] This plugin isn't particularly designed for end user use. You
-> probably want to use
+> [!IMPORTANT]
+> This plugin isn't particularly designed for end user use. You probably want
+> to use
 > [telescope-project.nvim](https://github.com/nvim-telescope/telescope-project.nvim)
 > instead. Caveat emptor.
 
