@@ -14,6 +14,17 @@ to invoke pickers that work off of the selected entry. For example, this makes
 it faster to get to the `find_files` or `live_grep` pickers, but relative to a
 specific project.
 
+## Concepts
+
+Trampoline defines the notion of "workspace roots", which contain project
+folders as direct descendants. Keep in mind that Trampoline only performs a
+shallow traversal of every workspace root&mdash;projects within projects are
+unsupported at this time.
+
+The picker presents each project folder from every workspace root as an entry.
+Each project is denoted with its originating workspace root. For example, a
+project folder at `~/src/prj/arizona` is shown as `prj: arizona`.
+
 ## Usage
 
 After installing this plugin,
@@ -23,10 +34,35 @@ After installing this plugin,
 require'telescope'.load_extension('trampoline')
 ```
 
-Keep in mind that this is optional if you don't care about tab completions being
-unavailable from the outset.
+Keep in mind that this is optional if you don't mind tab completions being
+lazily loaded.
 
-The picker can be invoked via `:Telescope trampoline`. A mapping is recommended:
+To configure your workspace roots, pass a table of paths as the
+`workspace_roots` extension option when setting up Telescope:
+
+```lua
+telescope.setup({
+  extensions = {
+    trampoline = {
+      workspace_roots = { "~/src/prj", "~/src/lib" },
+    },
+  },
+})
+```
+
+`~` characters in paths passed as strings are replaced with your home directory
+(resolved with [plenary]). You are also able to pass
+[plenary path objects](https://github.com/nvim-lua/plenary.nvim/blob/4f71c0c4a196ceb656c824a70792f3df3ce6bb6d/lua/plenary/path.lua)
+instead of strings if you'd prefer.
+
+[plenary]: https://github.com/nvim-lua/plenary.nvim
+
+> [!NOTE]
+> There are no default workspace roots, so you'll see an empty picker if you
+> don't pass in your own.
+
+Now, the picker can be invoked via `:Telescope trampoline`. A mapping is
+recommended:
 
 ```vim
 nnoremap <Leader>lp <Cmd>Telescope trampoline<CR>
@@ -36,22 +72,9 @@ nnoremap <Leader>lp <Cmd>Telescope trampoline<CR>
 vim.keymap.set("n", "<Leader>lp", "<Cmd>Telescope trampoline<CR>")
 ```
 
-## Concepts
+## Mappings
 
-Trampoline defines the notion of "workspace roots", which contain project
-folders as direct descendants. Keep in mind that Trampoline only performs a
-shallow traversal of every workspace root&mdash;projects within projects are
-unsupported at this time.
-
-Currently, the workspace roots are _hardcoded_ to be `~/src/prj` and
-`~/src/lib`. You are encouraged to change them in
-[`lua/telescope/_extensions/trampoline.lua`](./lua/telescope/_extensions/trampoline.lua).
-
-The picker presents each project folder from every workspace root as an entry.
-Each project is denoted with its originating workspace root. For example, a
-project folder at `~/src/prj/arizona` is shown as `prj: arizona`.
-
-By default, the following mappings are attached:
+By default, the following mappings are attached to the picker:
 
 | Mode   | Mapping | Action                                                                                                                   |
 | ------ | ------- | ------------------------------------------------------------------------------------------------------------------------ |

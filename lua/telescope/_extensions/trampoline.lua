@@ -12,13 +12,8 @@ local Path = require('plenary.path')
 
 local M = {}
 
-function M.discover_workpace_roots()
-  local home = Path:new(Path.path.home) -- :thinking:
-  return {home / 'src' / 'prj', home / 'src' / 'lib'}
-end
-
 function M.project_finder(opts)
-  local workspace_roots = opts.workspace_roots or M.discover_workpace_roots()
+  local workspace_roots = opts.workspace_roots or M.workspace_roots or {}
 
   local discovered_project_roots = {}
   for _, workspace_root in ipairs(workspace_roots) do
@@ -127,6 +122,14 @@ function M.project(opts)
 end
 
 return telescope.register_extension{
-  setup = function() end,
+  setup = function(ext_config)
+    M.workspace_roots = vim.tbl_map(function(root)
+      if type(root) == 'string' then
+        return Path:new((root:gsub(vim.pesc("~"), Path.path.home)))
+      else
+        return root
+      end
+    end, ext_config.workspace_roots or {})
+  end,
   exports = { trampoline = M.project },
 }
