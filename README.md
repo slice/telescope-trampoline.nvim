@@ -1,43 +1,56 @@
 # telescope-trampoline.nvim
 
 A [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) extension
-to jump between project directories. You probably want to use
-[telescope-project.nvim](https://github.com/nvim-telescope/telescope-project.nvim)
-instead.
+to jump between project directories.
 
-Trampoline makes it easier to jump between project folders and quickly edit
-files from them. It also provides a handy keybind to spawn a terminal in a new
-tab with the working directory set to the project root.
+> [!IMPORTANT] This plugin isn't particularly designed for end user use. You
+> probably want to use
+> [telescope-project.nvim](https://github.com/nvim-telescope/telescope-project.nvim)
+> instead. Caveat emptor.
+
+Trampoline accelerates navigation between project folders and provides mappings
+to invoke pickers that work off of the selected entry. For example, this makes
+it faster to get to the `find_files` or `live_grep` pickers, but relative to a
+specific project.
 
 ## Usage
 
-After installing this plugin through your plugin manager (or lack thereof), load
-the extension:
+After installing this plugin,
+[load the extension](https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#loading-extensions):
 
 ```lua
 require'telescope'.load_extension('trampoline')
 ```
 
-Then, add a mapping to invoke the extension:
+Keep in mind that this is optional if you don't care about tab completions being
+unavailable from the outset.
+
+The picker can be invoked via `:Telescope trampoline`. A mapping is recommended:
 
 ```vim
-nnoremap <leader>lp <cmd>lua require'telescope'.extensions.trampoline.trampoline.project{}<CR>
+nnoremap <Leader>lp <Cmd>Telescope trampoline<CR>
 ```
 
-Trampoline has the notion of "workspace roots". Directly within these roots lie
-project folders. Project folders of arbitrary depth are not supported; it is
-assumed that you have a flat listing of folders under each root. Currently, the
-workspace roots are hardcoded to be `~/src/prj` and `~/src/lib`. You are
-encouraged to change them in
+```lua
+vim.keymap.set("n", "<Leader>lp", "<Cmd>Telescope trampoline<CR>")
+```
+
+## Concepts
+
+Trampoline defines the notion of "workspace roots", which contain project
+folders as direct descendants. Keep in mind that Trampoline only performs a
+shallow traversal of every workspace root&mdash;projects within projects are
+unsupported at this time.
+
+Currently, the workspace roots are _hardcoded_ to be `~/src/prj` and
+`~/src/lib`. You are encouraged to change them in
 [`lua/telescope/_extensions/trampoline.lua`](./lua/telescope/_extensions/trampoline.lua).
 
-Invoking the extension presents a picker of project folders, discovered by
-listing the folders from each workspace root. The folder names are prefixed with
-the originating workspace root. For example, a project folder at
-`~/src/prj/arizona` is shown as `prj: arizona`. This is helpful should your
-workspace roots each contain projects of different categories.
+The picker presents each project folder from every workspace root as an entry.
+Each project is denoted with its originating workspace root. For example, a
+project folder at `~/src/prj/arizona` is shown as `prj: arizona`.
 
-The following mappings are present:
+By default, the following mappings are attached:
 
 | Mode   | Mapping | Action                                                                                                                   |
 | ------ | ------- | ------------------------------------------------------------------------------------------------------------------------ |
@@ -51,7 +64,7 @@ The following mappings are present:
 | insert | `<C-v>` | Opens the directory in a new `:vsplit`. Ditto.                                                                           |
 | insert | `<C-t>` | Opens the directory in a new tab. The working directory of the tab will be set to the project root.                      |
 
-I personally recommend using [dirvish.vim] for a more pleasant directory editing
-experience.
+[dirvish.vim] is recommended for an ergonomic directory editing experience (when
+used in combination with `<CR>`, `<C-x>`, etc.)
 
 [dirvish.vim]: https://github.com/justinmk/vim-dirvish
