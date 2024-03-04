@@ -126,7 +126,7 @@ function M.project(opts)
   }):find()
 end
 
-return telescope.register_extension {
+return telescope.register_extension{
   setup = function() end,
-  exports = { trampoline = M }
+  exports = { trampoline = M.project },
 }
